@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/components/back.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
+import 'package:provider/provider.dart';
 
 class StoryDetailsHeadWidget extends StatelessWidget {
-  const StoryDetailsHeadWidget({super.key});
-
+  StoryDetailsHeadWidget({super.key, required this.title});
+  String title;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,7 +15,7 @@ class StoryDetailsHeadWidget extends StatelessWidget {
           BackWidget(),
           Expanded(
             child: Text(
-              '童年印象',
+              title,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF3D6446),

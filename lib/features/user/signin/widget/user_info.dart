@@ -1,9 +1,11 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+import 'package:memoirverse/components/custom_button.dart';
 import 'package:memoirverse/components/custom_textfield.dart';
 import 'package:memoirverse/services/UserService.dart';
-import 'package:memoirverse/utils/Config.dart';
+
 import 'package:provider/provider.dart';
 
 class UserInfo extends StatelessWidget {
@@ -16,7 +18,8 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 310.w,
+        width: 390.w,
+        height: 706.h,
         decoration: const ShapeDecoration(
           color: Color(0xFFFFFFF4),
           shape: RoundedRectangleBorder(
@@ -28,163 +31,282 @@ class UserInfo extends StatelessWidget {
         ),
         child: Column(children: [
           SizedBox(height: 35.h),
-          Text(
-            '基本信息',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF75A47F),
-              fontSize: 22.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w600,
-              height: 0.05,
-              letterSpacing: -0.41,
-            ),
-          ),
-          Text(
-            '姓名',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0.07,
-              letterSpacing: -0.41,
-            ),
-          ),
-          Container(
-              width: 288,
-              height: 52,
-              decoration: ShapeDecoration(
-                color: Color(0x26919AB4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+          SizedBox(
+            width: 100.w,
+            height: 30.h,
+            child: Text(
+              '基本信息',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF3D6446),
+                fontSize: 22.sp,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                height: 1.3,
               ),
-              child: CustomTextField(
-                controller: nameController,
-                hintText: "请输入姓名",
-                //prefixIcon: Icons.person_outline,
-                background_color: Color(0x26919AB4),
-                inputType: TextInputType.phone,
-              )),
-          Text(
-            '性别',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0.07,
-              letterSpacing: -0.41,
             ),
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: []),
-          Text(
-            '生日',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0.07,
-              letterSpacing: -0.41,
-            ),
-          ),
-          Container(
-              width: 288,
-              height: 52,
-              decoration: ShapeDecoration(
-                color: Color(0x26919AB4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: CalendarDatePicker2(
-                config: CalendarDatePicker2Config(),
-                value: birthday,
-                onValueChanged: (dates) => birthday = dates,
-              )),
-          Text(
-            '最感兴趣的话题',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18.sp,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 0.07,
-              letterSpacing: -0.41,
-            ),
-          ),
-          Wrap(
-              children: List.generate(20, (index) => getTopic(context, index))),
-          Row(children: [
-            Expanded(
-                child: Container(
-                    width: 160.w,
+          Column(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 25.h),
+                Padding(
+                    padding: EdgeInsets.only(left: 50.w),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '姓名',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.sp,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                            height: 0.07,
+                            letterSpacing: -0.41,
+                          ),
+                        ))),
+                SizedBox(height: 15.h),
+                Container(
+                    width: 318.w,
                     height: 52.h,
                     decoration: ShapeDecoration(
+                      color: Color(0x26919AB4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                        child: CustomTextField(
+                      controller: nameController,
+                      hintText: "请输入姓名",
+                      //prefixIcon: Icons.person_outline,
+                      background_color: Color(0xFFEFF0EA),
+                      inputType: TextInputType.name,
+                    ))),
+                SizedBox(height: 25.h),
+                Padding(
+                    padding: EdgeInsets.only(left: 50.w),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '性别',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.sp,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                            height: 0.07,
+                            letterSpacing: -0.41,
+                          ),
+                        ))),
+                SizedBox(height: 15.h),
+                Container(
+                    width: 318.w,
+                    child: Row(children: [
+                      GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            context.read<UserService>().gender = "male";
+                          },
+                          child: Container(
+                              width: 22.w,
+                              height: 22.w,
+                              decoration: ShapeDecoration(
+                                shape: OvalBorder(
+                                  side: BorderSide(
+                                      width: 1,
+                                      color:
+                                          context.read<UserService>().gender ==
+                                                  "male"
+                                              ? Color(0xFF75A47F)
+                                              : Color(0xB2919AB4)),
+                                ),
+                              ),
+                              child:
+                                  context.read<UserService>().gender == "male"
+                                      ? Center(
+                                          child: Container(
+                                          width: 12.w,
+                                          height: 12.w,
+                                          decoration: const ShapeDecoration(
+                                            color: Color(0xFF75A47F),
+                                            shape: OvalBorder(),
+                                          ),
+                                        ))
+                                      : Container())),
+                      SizedBox(width: 10.w),
+                      Text(
+                        '男',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          height: 0.07,
+                          letterSpacing: -0.41,
+                        ),
+                      ),
+                      SizedBox(width: 100.w),
+                      GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            context.read<UserService>().gender = "female";
+                          },
+                          child: Container(
+                              width: 22.w,
+                              height: 22.w,
+                              decoration: ShapeDecoration(
+                                shape: OvalBorder(
+                                    side: BorderSide(
+                                        width: 1,
+                                        color: context
+                                                    .read<UserService>()
+                                                    .gender ==
+                                                "female"
+                                            ? Color(0xFF75A47F)
+                                            : Color(0xB2919AB4))),
+                              ),
+                              child:
+                                  context.read<UserService>().gender == "female"
+                                      ? Center(
+                                          child: Container(
+                                          width: 12.w,
+                                          height: 12.w,
+                                          decoration: const ShapeDecoration(
+                                            color: Color(0xFF75A47F),
+                                            shape: OvalBorder(),
+                                          ),
+                                        ))
+                                      : Container())),
+
+                      SizedBox(width: 10.w),
+                      Text(
+                        '女',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          height: 0.07,
+                          letterSpacing: -0.41,
+                        ),
+                      ),
+                      //SizedBox(width: 100.w)
+                    ])),
+                SizedBox(height: 25.h),
+                Padding(
+                    padding: EdgeInsets.only(left: 50.w),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '生日',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.sp,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                            height: 0.07,
+                            letterSpacing: -0.41,
+                          ),
+                        ))),
+                SizedBox(height: 15.h),
+                GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () async {
+                      DateTime? _selected_date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1920),
+                          lastDate: DateTime(2020),
+                          locale: Locale('zh'),
+                          initialDate: DateTime.parse(
+                              context.read<UserService>().birthday));
+                      if (_selected_date != null) {
+                        context.read<UserService>().birthday =
+                            DateFormat('yyyy-MM-dd').format(_selected_date);
+                      }
+                    },
+                    child: Container(
+                        width: 318.w,
+                        height: 52.h,
+                        decoration: ShapeDecoration(
+                          color: Color(0x26919AB4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                  padding: EdgeInsets.only(left: 10.w),
+                                  child: Text(
+                                    context.watch<UserService>().birthday,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.sp,
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0.07,
+                                      letterSpacing: -0.41,
+                                    ),
+                                  ))
+                            ]))),
+                SizedBox(height: 15.h),
+                Padding(
+                    padding: EdgeInsets.only(left: 50.w),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '最感兴趣的话题',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.sp,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                            height: 1.3,
+                            letterSpacing: -0.41,
+                          ),
+                        ))),
+                SizedBox(height: 15.h),
+                Wrap(
+                    children:
+                        List.generate(7, (index) => getTopic(context, index))),
+                SizedBox(height: 25.h),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  CustomButton(
+                      width: 160.w,
+                      height: 52.h,
                       color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 1, color: Color(0xFF75A47F)),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 93.w,
-                            height: 24.h,
-                            child: Text(
-                              '跳过',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color(0xFF75A47F),
-                                fontSize: 20.sp,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                height: 0.06,
-                                letterSpacing: -0.41,
-                              ),
-                            ),
-                          )
-                        ]))),
-            Expanded(
-                child: Container(
-                    width: 160,
-                    height: 52,
-                    decoration: ShapeDecoration(
+                      selected: true,
+                      needBorder: true,
+                      text: "跳过",
+                      fontColor: Color(0xFF75A47F),
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      onPress: () {}),
+                  SizedBox(width: 15.w),
+                  CustomButton(
+                      width: 160.w,
+                      height: 52.h,
                       color: Color(0xFF75A47F),
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 1, color: Color(0xFF75A47F)),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 93.w,
-                            height: 24.h,
-                            child: Text(
-                              '提交',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.sp,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                height: 0.06,
-                                letterSpacing: -0.41,
-                              ),
-                            ),
-                          )
-                        ])))
-          ])
+                      selected: true,
+                      needBorder: true,
+                      text: "提交",
+                      fontColor: Colors.white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      onPress: () {}),
+                ]),
+                SizedBox(height: 15.h),
+              ])
         ]));
   }
 
@@ -193,37 +315,39 @@ class UserInfo extends StatelessWidget {
         onTap: () {
           context.read<UserService>().topicSelected(index);
         },
-        child: Container(
-            width: 112.w,
-            height: 40.h,
-            decoration: ShapeDecoration(
-              color: Colors.white.withOpacity(0.5),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: Color(0xFF75A47F)),
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            child: SizedBox(
-                width: 93,
-                height: 24,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        context.read<UserService>().topic[index]["title"],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: context.watch<UserService>().topic[index]
-                                  ["selected"]
-                              ? Color(0xFF75A47F)
-                              : Color(0xB2919AB4),
-                          fontSize: 18.sp,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                          height: 0.07,
-                          letterSpacing: -0.41,
-                        ),
-                      ),
-                    ]))));
+        child: Padding(
+            padding: EdgeInsets.all(3.w),
+            child: Container(
+                width: 112.w,
+                height: 40.h,
+                decoration: ShapeDecoration(
+                  color: Colors.white.withOpacity(0.5),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(width: 1, color: Color(0xFF75A47F)),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: SizedBox(
+                    width: 93.w,
+                    height: 24.h,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            context.read<UserService>().topic[index]["title"],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: context.watch<UserService>().topic[index]
+                                      ["selected"]
+                                  ? Color(0xFF75A47F)
+                                  : Color(0xB2919AB4),
+                              fontSize: 18.sp,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                              height: 1.3,
+                              letterSpacing: -0.41,
+                            ),
+                          ),
+                        ])))));
   }
 }

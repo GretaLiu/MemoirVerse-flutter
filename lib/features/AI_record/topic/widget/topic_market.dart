@@ -52,50 +52,54 @@ class TopicMarketWidget extends StatelessWidget {
                   mainAxisSpacing: 8.0.w, // spacing between rows
                   crossAxisSpacing: 14.0.h, // spacing between columns
                   padding: EdgeInsets.all(8.0.w),
-                  children: List.generate(
-                    6,
-                    (index) {
-                      String image = context
-                          .read<AIRecordService>()
-                          .topic_list[index]["image"];
-                      String title = context
-                          .read<AIRecordService>()
-                          .topic_list[index]["title"];
-
-                      return TopicCoverWidget(
-                          image: image,
-                          title: title,
-                          onPress: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return UnconstrainedBox(
-                                    constrainedAxis: Axis.vertical,
-                                    child: SizedBox(
-                                        width: 370.w,
-                                        child: Dialog(
-                                            insetPadding: EdgeInsets.zero,
-                                            shape: RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                  width: 1.w,
-                                                  color: Color(0x7FC8C7AC)),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            elevation: 5.0,
-                                            backgroundColor: Color(0xFFFFFFF4),
-                                            child: TopicInfoWidget(
-                                                image: image, title: title)
-
-                                            //TopicQuestionWidget(
-                                            //    title: title)
-                                            )));
-                              },
-                            );
-                          });
-                    },
-                  ))),
+                  children: buildTopicMarket(context))),
           SizedBox(height: 20.h)
         ]));
+  }
+
+  List<Widget> buildTopicMarket(BuildContext context) {
+    List<Widget> market = [];
+    List<String> noSelectedTopics =
+        context.watch<AIRecordService>().getNoSelected();
+    for (int i = 0; i < noSelectedTopics.length; i++) {
+      String title = noSelectedTopics[i];
+      String image =
+          context.read<AIRecordService>().getTopicImageFromTitle(title);
+      String describe =
+          context.read<AIRecordService>().getTopicDescribeFromTitle(title);
+      Widget topicCover = TopicCoverWidget(
+          image: image,
+          title: title,
+          onLongPress: () {},
+          onPress: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return UnconstrainedBox(
+                    constrainedAxis: Axis.vertical,
+                    child: SizedBox(
+                        width: 370.w,
+                        child: Dialog(
+                            insetPadding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1.w, color: Color(0x7FC8C7AC)),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            elevation: 5.0,
+                            backgroundColor: Color(0xFFFFFFF4),
+                            child: TopicInfoWidget(
+                                image: image, title: title, describe: describe)
+
+                            //TopicQuestionWidget(
+                            //    title: title)
+                            )));
+              },
+            );
+          });
+      market.add(topicCover);
+    }
+
+    return market;
   }
 }

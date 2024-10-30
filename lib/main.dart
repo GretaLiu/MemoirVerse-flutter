@@ -7,9 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:memoirverse/core/hive/chat_prompt_model.dart';
 import 'package:memoirverse/core/hive/hive_chat_prompt_model.dart';
+import 'package:memoirverse/core/hive/hive_story_model.dart';
 import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
 import 'package:memoirverse/core/services/db_service.dart';
 import 'package:memoirverse/features/user/welcome.dart';
+import 'package:memoirverse/global/app_constants.dart';
 import 'package:memoirverse/services/AIRecordService.dart';
 import 'package:memoirverse/services/HomeService.dart';
 import 'package:memoirverse/services/PortfolioService.dart';
@@ -17,12 +19,14 @@ import 'package:memoirverse/services/UserService.dart';
 import 'package:memoirverse/services/WriteStoryService.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_storage/get_storage.dart';
 
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
   await dotenv.load(fileName: ".env");
+  await GetStorage.init();
   await Hive.initFlutter();
   await openBox();
 
@@ -43,6 +47,15 @@ Future<void> main() async {
         //child: const MyApp(),
         ),
   );
+  initApp(BuildContext context) {
+    final box = GetStorage();
+    // ignore: non_constant_identifier_names
+    List<String>? selected_topic_list =
+        box.read(AppConstants.selected_topic_list_key);
+    if (selected_topic_list != null) {
+      context.read<AIRecordService>().selected_topic_list = selected_topic_list;
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -64,13 +77,13 @@ class MyApp extends StatelessWidget {
             ),
             home:
                 const WelcomePage(), //const LandingPage() //const WelcomePage(),
-            localizationsDelegates: [
+            localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              const Locale('zh', 'CH'),
-              const Locale('en', 'US'),
+            supportedLocales: const [
+              Locale('zh', 'CH'),
+              Locale('en', 'US'),
             ],
           );
         });
@@ -80,5 +93,7 @@ class MyApp extends StatelessWidget {
 Future<void> openBox() async {
   Hive.registerAdapter(HiveChatPromptModelAdapter());
   Hive.registerAdapter(ChatPromptModelAdapter());
+  Hive.registerAdapter(HiveStoryModelAdapter());
   await Hive.openBox<HiveChatPromptModel>('chatBox');
+  await Hive.openBox<HiveStoryModel>('storyBox');
 }

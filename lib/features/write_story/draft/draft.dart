@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
 import 'package:memoirverse/features/write_story/edit/story_edit.dart';
 import 'package:memoirverse/features/write_story/draft/widget/draft_body.dart';
 import 'package:memoirverse/features/write_story/draft/widget/draft_head.dart';
 import 'package:memoirverse/components/forward_button.dart';
+import 'package:provider/provider.dart';
 
 class DraftPage extends StatelessWidget {
   const DraftPage({super.key});
@@ -21,6 +23,7 @@ class DraftPage extends StatelessWidget {
               const DraftHeadWidget(),
               const Expanded(child: DraftBodyWidget()),
               ForwardButton(onPress: () {
+                context.read<ChatGPTPromptService>().generateStory();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

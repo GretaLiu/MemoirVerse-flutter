@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/features/AI_record/home/widget/AIRecord_head.dart';
 import 'package:memoirverse/features/AI_record/note/notes.dart';
-import 'package:memoirverse/features/write_story/widget/chat_summary_history.dart';
-import 'package:memoirverse/features/write_story/widget/write_story_head.dart';
+import 'package:memoirverse/features/write_story/home/widget/chat_summary_history.dart';
+import 'package:memoirverse/features/write_story/home/widget/write_story_head.dart';
 
 class WriteStoryPage extends StatelessWidget {
   const WriteStoryPage({super.key});

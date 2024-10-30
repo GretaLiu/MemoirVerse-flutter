@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/components/custom_button.dart';
 import 'package:memoirverse/components/custom_textfield.dart';
 
 class SMS_Signin extends StatelessWidget {
@@ -10,6 +11,7 @@ class SMS_Signin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: 310.w,
+        height: 506.h,
         color: Color(0xFFFFFFF4),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
@@ -24,7 +26,7 @@ class SMS_Signin extends StatelessWidget {
               //letterSpacing: -0.41,
             ),
           ),
-          SizedBox(height: 17.h),
+          //SizedBox(height: 17.h),
           Row(children: [
             Container(
                 width: 180.w,
@@ -99,37 +101,22 @@ class SMS_Signin extends StatelessWidget {
                 controller: smsCodeController,
                 hintText: "输入验证码",
                 //prefixIcon: Icons.person_outline,
-                background_color: Color(0x26919AB4),
+                background_color: Color(0xFFEFF0EA),
                 inputType: TextInputType.phone,
               ))),
           SizedBox(height: 50.h),
           Center(
-              child: Container(
+              child: CustomButton(
                   width: 160.w,
                   height: 48.h,
-                  decoration: ShapeDecoration(
-                    color: Color(0xFF75A47F),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFF75A47F)),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '登陆',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.sp,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            height: 0.06,
-                            letterSpacing: -0.41,
-                          ),
-                        ),
-                      ]))),
+                  color: Color(0xFF75A47F),
+                  selected: true,
+                  needBorder: true,
+                  text: "登录",
+                  fontColor: Colors.white,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                  onPress: () {})),
           SizedBox(height: 50.h),
         ]));
   }

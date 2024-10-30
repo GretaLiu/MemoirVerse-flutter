@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/core/hive/hive_story_model.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
 import 'package:memoirverse/features/portfolio/library/story_details/story_details.dart';
-import 'package:memoirverse/features/write_story/edit/story_edit.dart';
+import 'package:provider/provider.dart';
 
 class StoryCoverWidget extends StatelessWidget {
-  const StoryCoverWidget({super.key});
+  StoryCoverWidget({super.key, required this.story});
+  HiveStoryModel story;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +32,7 @@ class StoryCoverWidget extends StatelessWidget {
             Expanded(
               child: Center(
                   child: Text(
-                '青春留影：草原上的家',
+                story.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF3D6446),
@@ -44,10 +47,12 @@ class StoryCoverWidget extends StatelessWidget {
             GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
+                  context.read<ChatGPTPromptService>().story = story;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const StoryDetailsPage()),
+                        builder: (context) =>
+                            StoryDetailsPage(isDetails: true)),
                   );
                 },
                 child: Row(children: [
@@ -83,14 +88,18 @@ class StoryCoverWidget extends StatelessWidget {
             child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
+                  context.read<ChatGPTPromptService>().story = story;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const StoryDetailsPage()),
+                        builder: (context) =>
+                            StoryDetailsPage(isDetails: true)),
                   );
                 },
                 child: Text(
-                  '在那个被雾气笼罩的童年时光里，郝音素是我\n不可分割的小伙伴。她胆小，学骑自行车这样\n的小事在她看来都是一场巨大的冒险。而我，\n早已在风中驰骋，却 ...',
+                  story.paragraph[0],
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16.sp,

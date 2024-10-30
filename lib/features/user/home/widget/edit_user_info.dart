@@ -81,7 +81,7 @@ class EditUserInfoDialog extends StatelessWidget {
                       controller: nameController,
                       hintText: "请输入姓名",
                       //prefixIcon: Icons.person_outline,
-                      background_color: Color(0x26919AB4),
+                      background_color: Color(0xFFEFF0EA),
                       inputType: TextInputType.name,
                     ))),
                 SizedBox(height: 25.h),

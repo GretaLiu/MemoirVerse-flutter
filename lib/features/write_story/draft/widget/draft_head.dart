@@ -30,9 +30,7 @@ class DraftHeadWidget extends StatelessWidget {
           GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                context
-                    .read<ChatGPTPromptService>()
-                    .sendGenerateSummaryPrompt();
+                context.read<ChatGPTPromptService>().sendGenerateDraftPrompt();
               },
               child: Container(
                   width: 52.w,

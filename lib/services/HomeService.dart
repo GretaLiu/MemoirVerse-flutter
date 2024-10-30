@@ -3,7 +3,7 @@ import 'package:memoirverse/features/AI_record/home/AIRecord.dart';
 import 'package:memoirverse/features/portfolio/home/portfolio.dart';
 import 'package:memoirverse/features/user/home/user.dart';
 
-import 'package:memoirverse/features/write_story/write_story.dart';
+import 'package:memoirverse/features/write_story/home/write_story.dart';
 
 class HomeService extends ChangeNotifier {
   int _selectedIndex = 0;

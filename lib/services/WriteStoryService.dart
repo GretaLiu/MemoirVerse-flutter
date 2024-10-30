@@ -26,11 +26,20 @@ class WriteStoryService extends ChangeNotifier {
   List<Map> get chat_summary_history => _chat_summary_history;
 
   final List<String> _decorate_background = [
-    "assets/images/decorate_1.jpg",
-    "assets/images/decorate_2.jpg",
-    "assets/images/decorate_3.jpg",
-    "assets/images/decorate_4.jpg",
-    "assets/images/decorate_5.jpg",
+    "assets/images/background/bg-beige.be61b53a.jpg",
+    "assets/images/background/bg-darkblue.acac1538.jpg",
+    "assets/images/background/bg-green.e7ea2344.jpg",
+    "assets/images/background/bg-lightblue.98172658.jpg",
+    "assets/images/background/bg-warmbeige.bc353450.jpg",
+    "assets/images/background/bg-yellow.b7cbfc17.jpg",
+    "assets/images/background/bgi2.526daa0a.jpg",
+    "assets/images/background/bgi3.0effc88d.jpg",
+    "assets/images/background/bookbgi.702575ec.jpg",
+    "assets/images/background/decorate_1.jpg",
+    "assets/images/background/decorate_2.jpg",
+    "assets/images/background/decorate_3.jpg",
+    "assets/images/background/decorate_4.jpg",
+    "assets/images/background/decorate_5.jpg",
   ];
   List<String> get decorate_background => _decorate_background;
   int _decorate_background_index = 0;

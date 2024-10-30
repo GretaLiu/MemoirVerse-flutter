@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/features/AI_record/home/widget/AIRecord_head.dart';
 import 'package:memoirverse/features/AI_record/topic/widget/delete_topic_button.dart';
 import 'package:memoirverse/features/AI_record/topic/widget/topic_info.dart';
 import 'package:memoirverse/features/AI_record/topic/widget/topic_question.dart';
+import 'package:memoirverse/services/AIRecordService.dart';
+import 'package:provider/provider.dart';
 
 class TopicCoverWidget extends StatelessWidget {
   TopicCoverWidget({
@@ -10,13 +13,18 @@ class TopicCoverWidget extends StatelessWidget {
     required this.image,
     required this.title,
     required this.onPress,
+    required this.onLongPress,
   });
   String image;
   String title;
   final VoidCallback onPress;
+  final VoidCallback onLongPress;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+        onLongPress: () {
+          onLongPress();
+        },
         onTap: () {
           onPress();
         },
@@ -73,7 +81,9 @@ class TopicCoverWidget extends StatelessWidget {
                             ),
                           )))),
               Expanded(child: Container()),
-              //DeleteTopicButton(),
+              context.watch<AIRecordService>().isDeleteTopic
+                  ? DeleteTopicButton(topicTitle: title)
+                  : Container(),
               SizedBox(height: 11.h)
             ])));
   }

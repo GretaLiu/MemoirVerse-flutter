@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:memoirverse/core/hive/hive_story_model.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
+import 'package:provider/provider.dart';
 
-class StoryEditAddButtonWidget extends StatelessWidget {
-  const StoryEditAddButtonWidget({super.key});
-
+class StoryEditAddButton extends StatelessWidget {
+  StoryEditAddButton({super.key, required this.index});
+  int index;
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
@@ -15,7 +19,7 @@ class StoryEditAddButtonWidget extends StatelessWidget {
         itemBuilder: (BuildContext context) {
           return <PopupMenuEntry<String>>[
             PopupMenuItem(
-                value: "text",
+                value: "image",
                 child: Center(
                     child: Text(
                   '图片',
@@ -45,7 +49,25 @@ class StoryEditAddButtonWidget extends StatelessWidget {
                 )))
           ];
         },
-        onSelected: (dynamic value) {},
+        onSelected: (dynamic value) async {
+          if (value == "image") {
+            final ImagePicker picker = ImagePicker();
+// Pick an image.
+            final XFile? image =
+                await picker.pickImage(source: ImageSource.gallery);
+            if (image == null) return;
+            HiveStoryModel? hiveStory =
+                context.read<ChatGPTPromptService>().story;
+            String image_path = image.path;
+            context
+                .read<ChatGPTPromptService>()
+                .insertParagraph(index, image_path);
+          } else if (value == "text") {
+            context
+                .read<ChatGPTPromptService>()
+                .insertParagraph(index, "请写故事段落");
+          }
+        },
         icon: Container(
             width: 32.w,
             height: 32.h,

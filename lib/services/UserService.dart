@@ -23,7 +23,7 @@ class UserService extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _gender = "男";
+  String _gender = "male";
   String get gender => _gender;
   set gender(gender) {
     _gender = gender;
@@ -41,6 +41,20 @@ class UserService extends ChangeNotifier {
   String get birthday => _birthday;
   set birthday(birthday) {
     _birthday = birthday;
+    notifyListeners();
+  }
+
+  bool _need_signin = false;
+  bool get need_signin => _need_signin;
+  set need_signin(need_sign) {
+    _need_signin = need_sign;
+    notifyListeners();
+  }
+
+  int _signin_type = 0;
+  int get signin_type => _signin_type;
+  set signin_type(type) {
+    _signin_type = type;
     notifyListeners();
   }
 

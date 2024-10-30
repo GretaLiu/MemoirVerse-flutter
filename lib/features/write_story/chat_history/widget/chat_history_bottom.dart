@@ -18,7 +18,7 @@ class ChatHistoryBottomWidget extends StatelessWidget {
           color: Colors.white,
           selected: true,
           needBorder: true,
-          text: "确认",
+          text: "接着聊",
           fontColor: Color(0xFF75A47F),
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,
@@ -35,13 +35,15 @@ class ChatHistoryBottomWidget extends StatelessWidget {
           color: Color(0xFF75A47F),
           selected: true,
           needBorder: true,
-          text: "确认",
+          text: "生成故事",
           fontColor: Colors.white,
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,
           onPress: () {
-            context.read<ChatGPTPromptService>().sendGenerateTitlePrompt();
-            context.read<ChatGPTPromptService>().sendGenerateSummaryPrompt();
+            context.read<ChatGPTPromptService>().draft.clear();
+            context.read<ChatGPTPromptService>().draft_index = 0;
+            context.read<ChatGPTPromptService>().sendGenerateDraftPrompt();
+            context.read<ChatGPTPromptService>().sendGenerateDraftTitlePrompt();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const DraftPage()),

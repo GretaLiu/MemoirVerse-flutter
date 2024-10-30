@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/components/back.dart';
+import 'package:memoirverse/core/hive/hive_story_model.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
+import 'package:memoirverse/core/services/db_service.dart';
+import 'package:provider/provider.dart';
 
 class StoryEditHeadWidget extends StatelessWidget {
   const StoryEditHeadWidget({super.key});
@@ -25,16 +29,28 @@ class StoryEditHeadWidget extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 22.w,
-            height: 22.h,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/disk.png"),
-                fit: BoxFit.fill,
-              ),
-            ),
-          )
+          GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                HiveStoryModel? hiveStory =
+                    context.read<ChatGPTPromptService>().story;
+                context.read<LocalDBService>().saveStory(hiveStory!);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('保存故事成功'),
+                  ),
+                );
+              },
+              child: Container(
+                width: 22.w,
+                height: 22.h,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/disk.png"),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ))
         ]));
   }
 }

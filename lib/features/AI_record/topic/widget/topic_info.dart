@@ -5,9 +5,14 @@ import 'package:memoirverse/services/AIRecordService.dart';
 import 'package:provider/provider.dart';
 
 class TopicInfoWidget extends StatelessWidget {
-  TopicInfoWidget({super.key, required this.image, required this.title});
+  TopicInfoWidget(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.describe});
   String image;
   String title;
+  String describe;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +69,7 @@ class TopicInfoWidget extends StatelessWidget {
           SizedBox(
             width: 276.w,
             child: Text(
-              '这里是场景的描述，回忆内容的描述什么描述都可以，到时候再加吧。没所谓的。是文字工作了',
+              describe,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18.sp,
@@ -80,6 +85,7 @@ class TopicInfoWidget extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onTap: () {
                 context.read<AIRecordService>().selectOneTopic(title);
+                Navigator.of(context).pop();
               },
               child: Container(
                   width: 160.w,

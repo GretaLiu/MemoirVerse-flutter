@@ -173,7 +173,7 @@ class TextToSpeech {
               "voice_type": voice_type[Global.voice_type_index],
               "encoding": "mp3",
               "speed_ratio": Global.speaking_speed.toInt(),
-              "volume_ratio": 1.0,
+              "volume_ratio": Global.speaking_speed,
               "pitch_ratio": 1.0,
             },
             "request": {

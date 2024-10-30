@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/components/custom_button.dart';
 import 'package:memoirverse/components/custom_textfield.dart';
+import 'package:memoirverse/services/UserService.dart';
+import 'package:provider/provider.dart';
 
-class Password_Signin extends StatelessWidget {
-  Password_Signin({super.key});
+class PasswordSignin extends StatelessWidget {
+  PasswordSignin({super.key});
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
         width: 310.w,
+        height: 506.h,
         color: Color(0xFFFFFFF4),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          SizedBox(height: 10.h),
           Text(
             '用户名',
             textAlign: TextAlign.center,
@@ -24,22 +29,25 @@ class Password_Signin extends StatelessWidget {
               letterSpacing: -0.41,
             ),
           ),
+          SizedBox(height: 17.h),
           Container(
-              width: 288,
-              height: 52,
+              width: 288.w,
+              height: 52.h,
               decoration: ShapeDecoration(
-                color: Color(0x26919AB4),
+                color: Color(0xFFEFF0EA),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: CustomTextField(
+              child: Center(
+                  child: CustomTextField(
                 controller: usernameController,
                 hintText: "请输入用户名",
                 //prefixIcon: Icons.person_outline,
-                background_color: Color(0x26919AB4),
+                background_color: Color(0xFFEFF0EA),
                 inputType: TextInputType.name,
-              )),
+              ))),
+          SizedBox(height: 29.h),
           Text(
             '密码',
             textAlign: TextAlign.center,
@@ -52,86 +60,74 @@ class Password_Signin extends StatelessWidget {
               letterSpacing: -0.41,
             ),
           ),
+          SizedBox(height: 17.h),
           Container(
-              width: 288,
-              height: 52,
+              width: 288.w,
+              height: 52.h,
               decoration: ShapeDecoration(
-                color: Color(0x26919AB4),
+                color: Color(0xFFEFF0EA),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: CustomTextField(
+              child: Center(
+                  child: CustomTextField(
                 controller: passwordController,
                 hintText: "请输入密码",
                 //prefixIcon: Icons.person_outline,
                 inputType: TextInputType.visiblePassword,
-                background_color: Color(0x26919AB4),
-              )),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            SizedBox(
-              width: 40.w,
-              height: 39.h,
-              child: Text(
-                '注册',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF919AB4),
-                  fontSize: 18.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  height: 0.07,
-                  letterSpacing: -0.41,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 76.w,
-              height: 39.h,
-              child: Text(
-                '忘记密码',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF919AB4),
-                  fontSize: 18.sp,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  height: 0.07,
-                  letterSpacing: -0.41,
-                ),
-              ),
-            )
-          ]),
-          Container(
-              width: 160,
-              height: 48,
-              decoration: ShapeDecoration(
-                color: Color(0xFF75A47F),
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1, color: Color(0xFF75A47F)),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                background_color: Color(0xFFEFF0EA),
+              ))),
+          SizedBox(height: 50.h),
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 93.w,
-                      height: 24.h,
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        context.read<UserService>().signin_type = 2;
+                      },
                       child: Text(
-                        '登陆',
+                        '注册',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.sp,
+                          color: Color(0xFF919AB4),
+                          fontSize: 18.sp,
                           fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                          height: 0.06,
+                          fontWeight: FontWeight.w400,
+                          height: 1.3,
                           letterSpacing: -0.41,
                         ),
                       ),
-                    )
-                  ]))
+                    ),
+                    Text(
+                      '忘记密码',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFF919AB4),
+                        fontSize: 18.sp,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        height: 0.07,
+                        letterSpacing: -0.41,
+                      ),
+                    ),
+                  ])),
+          SizedBox(height: 50.h),
+          Center(
+              child: CustomButton(
+                  width: 160.w,
+                  height: 48.h,
+                  color: Color(0xFF75A47F),
+                  selected: true,
+                  needBorder: true,
+                  text: "登录",
+                  fontColor: Colors.white,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                  onPress: () {}))
         ]));
   }
 }

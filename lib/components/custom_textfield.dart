@@ -10,10 +10,12 @@ class CustomTextField extends StatelessWidget {
   final TextInputType inputType;
   final Color background_color;
   final String hintText;
+  final double fontSize;
 
   bool autofocus = false;
 
   FocusNode? focusNode;
+  Color fontColor;
 
   CustomTextField({
     Key? key,
@@ -26,6 +28,8 @@ class CustomTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.autofocus = false,
     this.focusNode = null,
+    this.fontColor = const Color(0xFF919AB4),
+    this.fontSize = 20,
     required this.inputType,
   }) : super(key: key);
 
@@ -50,8 +54,8 @@ class CustomTextField extends StatelessWidget {
         textAlign: TextAlign.start,
         autofocus: autofocus,
         style: TextStyle(
-          color: Color(0xFF919AB4),
-          fontSize: 20.sp,
+          color: fontColor,
+          fontSize: fontSize.sp,
           fontFamily: 'Inter',
           fontWeight: FontWeight.w400,
           height: 1.3,
@@ -66,8 +70,7 @@ class CustomTextField extends StatelessWidget {
           counterText: "",
           labelStyle: const TextStyle(color: Colors.grey),
           filled: true,
-          fillColor:
-              background_color, // Color(0xFFEFF0EA), //const Color(0xffF6F6F8),
+          fillColor: background_color,
           //隐藏下划线
           border: InputBorder.none,
           hintStyle: TextStyle(

@@ -2,10 +2,12 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
 import 'package:memoirverse/features/write_story/chat_history/widget/chat_history_bottom.dart';
 import 'package:memoirverse/features/write_story/chat_history/widget/chat_history_body.dart';
 import 'package:memoirverse/features/write_story/chat_history/widget/chat_history_head.dart';
 import 'package:memoirverse/features/write_story/chat_history/widget/chat_history_time.dart';
+import 'package:provider/provider.dart';
 
 class ChatHistoryPage extends StatelessWidget {
   const ChatHistoryPage({super.key});
@@ -27,7 +29,9 @@ class ChatHistoryPage extends StatelessWidget {
               const ChatHistoryHeadWidget(),
               SizedBox(height: 15.h),
               ChatHistoryTimeWidget(
-                  time: formatDate(DateTime.now(),
+                  time: formatDate(
+                      DateTime.fromMillisecondsSinceEpoch(int.parse(
+                          context.read<ChatGPTPromptService>().chat_id)),
                       [yyyy, '年', mm, '月', dd, '日', HH, ":", nn])),
               const ChatHistoryBodyWidget(),
               const ChatHistoryBottomWidget(),

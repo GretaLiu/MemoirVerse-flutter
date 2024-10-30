@@ -1,12 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/components/close.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
+import 'package:memoirverse/features/AI_record/chat/chat.dart';
 import 'package:memoirverse/services/AIRecordService.dart';
 import 'package:provider/provider.dart';
 
 class TopicQuestionWidget extends StatelessWidget {
   TopicQuestionWidget({super.key, required this.title});
   String title;
+  List<int> questions = [0, 1, 2];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,91 +73,117 @@ class TopicQuestionWidget extends StatelessWidget {
                     return buildQuestion(context, index); //每个item的布局
                   },
                   itemCount: 3)),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 24.w,
-                  height: 24.18.h,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/refresh.png"),
-                      fit: BoxFit.fill,
+          GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                context.read<AIRecordService>().generateRandomQuestions();
+              },
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 24.w,
+                      height: 24.18.h,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/refresh.png"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  width: 65.w,
-                  height: 28.22.h,
-                  child: Text(
-                    '换一批',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF3D6446),
-                      fontSize: 20.sp,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                      letterSpacing: -0.41,
-                    ),
-                  ),
-                )
-              ]),
+                    SizedBox(
+                      width: 65.w,
+                      height: 28.22.h,
+                      child: Text(
+                        '换一批',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xFF3D6446),
+                          fontSize: 20.sp,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                          letterSpacing: -0.41,
+                        ),
+                      ),
+                    )
+                  ])),
           SizedBox(height: 24.h)
         ]));
   }
 
   Widget buildQuestion(BuildContext context, int index) {
-    return Padding(
-        padding: EdgeInsets.fromLTRB(15.0.w, 5.0.h, 17.0.w, 13.0.h),
-        child: Container(
-            width: 336.w,
-            decoration: ShapeDecoration(
-              color: Color(0x99F3E2CF),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              shadows: [
-                BoxShadow(
-                  color: Color(0x3F7F7C7C),
-                  blurRadius: 10.r,
-                  offset: Offset(-2.w, 2.h),
-                  spreadRadius: 0,
-                )
-              ],
-            ),
-            child: Padding(
-                padding: EdgeInsets.fromLTRB(14.0.w, 10.0.h, 10.0.w, 13.0.h),
-                child: SizedBox(
-                    width: 288.w,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                              child: Text(
-                            '您能跟我讲讲您的出生的地方和家乡吗？',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18.sp,
-                              fontFamily: 'Inder',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                              letterSpacing: -0.41,
-                            ),
-                          )),
-                          SizedBox(width: 13.w),
-                          Container(
-                            width: 12.w,
-                            height: 12.09.h,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage("assets/images/previous.png"),
-                                fit: BoxFit.fill,
+    String detail = "";
+    Map? question = context.watch<AIRecordService>().random_questions[index];
+    if (question == null)
+      detail = "";
+    else
+      detail = question["detail"];
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          if (detail.isNotEmpty) {
+            context
+                .read<ChatGPTPromptService>()
+                .startNewChat(topic: title, question: question);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ChatPage()),
+            );
+          }
+        },
+        child: Padding(
+            padding: EdgeInsets.fromLTRB(15.0.w, 5.0.h, 17.0.w, 13.0.h),
+            child: Container(
+                width: 336.w,
+                decoration: ShapeDecoration(
+                  color: Color(0x99F3E2CF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  shadows: [
+                    BoxShadow(
+                      color: Color(0x3F7F7C7C),
+                      blurRadius: 10.r,
+                      offset: Offset(-2.w, 2.h),
+                      spreadRadius: 0,
+                    )
+                  ],
+                ),
+                child: Padding(
+                    padding:
+                        EdgeInsets.fromLTRB(14.0.w, 10.0.h, 10.0.w, 13.0.h),
+                    child: SizedBox(
+                        width: 288.w,
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                detail,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.sp,
+                                  fontFamily: 'Inder',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                  letterSpacing: -0.41,
+                                ),
+                              )),
+                              SizedBox(width: 13.w),
+                              Container(
+                                width: 12.w,
+                                height: 12.09.h,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/previous.png"),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          SizedBox(width: 8.w)
-                        ])))));
+                              SizedBox(width: 8.w)
+                            ]))))));
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/core/hive/hive_chat_prompt_model.dart';
 import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
 import 'package:memoirverse/core/services/db_service.dart';
-import 'package:memoirverse/features/write_story/widget/chat_bubble.dart';
+import 'package:memoirverse/features/write_story/chat_history/widget/chat_bubble.dart';
 import 'package:provider/provider.dart';
 
 class ChatHistoryBodyWidget extends StatelessWidget {

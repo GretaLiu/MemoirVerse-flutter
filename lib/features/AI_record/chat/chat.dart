@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
-import 'package:memoirverse/features/AI_record/chat/widget/chat_top.dart';
+import 'package:memoirverse/features/AI_record/chat/widget/chat_head.dart';
 import 'package:memoirverse/features/AI_record/chat/widget/speak_box.dart';
 import 'package:memoirverse/features/write_story/chat_history/chat_history.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,7 @@ class ChatPage extends StatelessWidget {
           ),
           child: Column(children: [
             SizedBox(height: 51.h),
-            const ChatTopWidget(),
+            const ChatHeadWidget(),
             Padding(
                 padding: EdgeInsets.fromLTRB(37.w, 10.h, 37.w, 10.h),
                 child: Row(
@@ -81,7 +81,9 @@ class ChatPage extends StatelessWidget {
                       Padding(
                           padding: EdgeInsets.fromLTRB(33.w, 20.h, 33.w, 20.h),
                           child: Text(
-                            context.watch<ChatGPTPromptService>().AI_ask,
+                            context
+                                .watch<ChatGPTPromptService>()
+                                .last_assistant,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 20.sp,

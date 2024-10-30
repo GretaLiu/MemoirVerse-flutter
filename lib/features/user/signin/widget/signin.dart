@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/features/user/signin/widget/password_signin.dart';
 import 'package:memoirverse/features/user/signin/widget/sms_signin.dart';
+import 'package:memoirverse/services/UserService.dart';
+import 'package:provider/provider.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -9,6 +12,7 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: 390.w,
+        height: 706.h,
         decoration: const ShapeDecoration(
           color: Color(0xFFFFFFF4),
           shape: RoundedRectangleBorder(
@@ -21,18 +25,28 @@ class SignIn extends StatelessWidget {
         child: Column(children: [
           SizedBox(height: 35.h),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text(
-              '短信登陆',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF75A47F),
-                fontSize: 22.sp,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-                height: 0.05,
-                letterSpacing: -0.41,
-              ),
-            ),
+            GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  print("sms sign");
+                  context.read<UserService>().signin_type = 0;
+                },
+                child: Text(
+                  '短信登陆',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: context.watch<UserService>().signin_type == 0
+                        ? Color(0xFF75A47F)
+                        : Color(0xFF919AB4),
+                    fontSize: 22.sp,
+                    fontFamily: 'Inter',
+                    fontWeight: context.watch<UserService>().signin_type == 0
+                        ? FontWeight.w600
+                        : FontWeight.w400,
+                    height: 0.05,
+                    letterSpacing: -0.41,
+                  ),
+                )),
             SizedBox(width: 20.w),
             Container(
               width: 2.w,
@@ -48,21 +62,32 @@ class SignIn extends StatelessWidget {
               ),
             ),
             SizedBox(width: 20.w),
-            Text(
-              '密码登陆',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF919AB4),
-                fontSize: 22.sp,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                height: 0.05,
-                letterSpacing: -0.41,
-              ),
-            )
+            GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  context.read<UserService>().signin_type = 1;
+                },
+                child: Text(
+                  '密码登陆',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: context.watch<UserService>().signin_type == 1
+                        ? Color(0xFF75A47F)
+                        : Color(0xFF919AB4),
+                    fontSize: 22.sp,
+                    fontFamily: 'Inter',
+                    fontWeight: context.watch<UserService>().signin_type == 1
+                        ? FontWeight.w600
+                        : FontWeight.w400,
+                    height: 0.05,
+                    letterSpacing: -0.41,
+                  ),
+                ))
           ]),
           SizedBox(height: 20.h),
-          SMS_Signin(),
+          context.watch<UserService>().signin_type == 0
+              ? SMS_Signin()
+              : PasswordSignin(),
           SizedBox(height: 50.h)
         ]));
   }

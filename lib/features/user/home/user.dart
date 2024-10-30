@@ -5,8 +5,8 @@ import 'package:memoirverse/features/AI_record/note/notes.dart';
 import 'package:memoirverse/features/portfolio/library/story_details/story_details.dart';
 import 'package:memoirverse/features/user/home/widget/edit_user_info.dart';
 import 'package:memoirverse/features/user/signin/widget/redeem_code.dart';
-import 'package:memoirverse/features/write_story/widget/chat_summary_history.dart';
-import 'package:memoirverse/features/write_story/widget/write_story_head.dart';
+import 'package:memoirverse/features/write_story/home/widget/chat_summary_history.dart';
+import 'package:memoirverse/features/write_story/home/widget/write_story_head.dart';
 import 'package:memoirverse/services/UserService.dart';
 import 'package:provider/provider.dart';
 

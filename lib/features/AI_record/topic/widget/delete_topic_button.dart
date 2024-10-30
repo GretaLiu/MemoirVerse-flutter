@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/services/AIRecordService.dart';
+import 'package:provider/provider.dart';
 
 class DeleteTopicButton extends StatelessWidget {
-  DeleteTopicButton({super.key});
+  DeleteTopicButton({super.key, required this.topicTitle});
+  String topicTitle;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () {},
+        onTap: () {
+          context.read<AIRecordService>().noSelectOneTopic(topicTitle);
+        },
         child: Container(
             width: 128.w,
             height: 34.h,

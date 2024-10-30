@@ -45,13 +45,14 @@ class _SpeakBoxState extends State {
   @override
   void initState() {
     super.initState();
+    _startRecord();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _recorderStatus.cancel();
-    _audioStream.cancel();
+    if (_recorderStatus != null) _recorderStatus.cancel();
+    if (_audioStream != null) _audioStream.cancel();
     //speechToText?.close();
 
     super.dispose();
@@ -101,6 +102,10 @@ class _SpeakBoxState extends State {
   }
 
   void _startRecord() async {
+    state = 0;
+    setState(() {
+      isTalking = true;
+    });
     var status = await Permission.microphone.request();
     if (status != PermissionStatus.granted) {
       throw RecordingPermissionException('Microphone permission not granted');
@@ -114,6 +119,10 @@ class _SpeakBoxState extends State {
   }
 
   void _stopRecord() async {
+    state = 2;
+    setState(() {
+      isTalking = false;
+    });
     await _recorder.stop();
 
     setState(() {});
@@ -312,18 +321,8 @@ class _SpeakBoxState extends State {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         if (isTalking) {
-                          state = 2;
-                          setState(() {
-                            isTalking = false;
-                          });
-                          //stopRecorder();
                           _stopRecord();
                         } else {
-                          state = 0;
-                          setState(() {
-                            isTalking = true;
-                          });
-                          //startSpeak();
                           _startRecord();
                         }
                       },
@@ -360,6 +359,7 @@ class _SpeakBoxState extends State {
 
                           if (answer.isEmpty) return;
                           sendAnswerToAI(context, answer);
+                          speakTextController.text = "";
                         },
                         child: Container(
                           width: 36.w,
@@ -377,10 +377,9 @@ class _SpeakBoxState extends State {
   }
 
   sendAnswerToAI(BuildContext context, String answer) {
-    int voice_type_index = context.read<AIRecordService>().voice_type_index;
-    double speaking_speed = context.read<AIRecordService>().speaking_speed;
     context
         .read<ChatGPTPromptService>()
         .sendInterviewPrompt(prompt: answer, onQuestion: speakQuestion);
+    Navigator.pop(context);
   }
 }

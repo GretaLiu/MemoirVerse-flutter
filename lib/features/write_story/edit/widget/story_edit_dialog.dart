@@ -1,11 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/components/custom_textfield.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
+import 'package:provider/provider.dart';
 
 class StoryEditDialog extends StatelessWidget {
-  const StoryEditDialog({super.key});
-
+  StoryEditDialog({super.key, required this.index});
+  int index;
+  final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    String content =
+        context.watch<ChatGPTPromptService>().story!.paragraph[index];
+    textController.text = content;
     return Container(
         width: 368.w,
         height: 600.h,
@@ -30,56 +39,68 @@ class StoryEditDialog extends StatelessWidget {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                        width: 80.w,
-                        height: 40.h,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(width: 1, color: Color(0xFF75A47F)),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '取消',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF75A47F),
-                              fontSize: 18.sp,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              height: 0.07,
-                              letterSpacing: -0.41,
-                            ),
-                          ),
-                        )),
-                    Container(
-                        width: 80.w,
-                        height: 40.h,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFF75A47F),
-                          shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(width: 1, color: Color(0xFF75A47F)),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '完成',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
+                    GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                            width: 80.w,
+                            height: 40.h,
+                            decoration: ShapeDecoration(
                               color: Colors.white,
-                              fontSize: 18.sp,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w700,
-                              height: 0.07,
-                              letterSpacing: -0.41,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    width: 1, color: Color(0xFF75A47F)),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                             ),
-                          ),
-                        ))
+                            child: Center(
+                              child: Text(
+                                '取消',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color(0xFF75A47F),
+                                  fontSize: 18.sp,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0.07,
+                                  letterSpacing: -0.41,
+                                ),
+                              ),
+                            ))),
+                    GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          context
+                              .read<ChatGPTPromptService>()
+                              .updateParagraph(index, textController.text);
+                        },
+                        child: Container(
+                            width: 80.w,
+                            height: 40.h,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFF75A47F),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    width: 1, color: Color(0xFF75A47F)),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '完成',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.sp,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0.07,
+                                  letterSpacing: -0.41,
+                                ),
+                              ),
+                            )))
                   ])),
           Expanded(
               child: Padding(
@@ -95,36 +116,39 @@ class StoryEditDialog extends StatelessWidget {
                       ),
                       child: SingleChildScrollView(
                           child: Padding(
-                        padding: EdgeInsets.all(10.w),
-                        child: Text(
-                          '在那个被雾气笼罩的童年时光里，郝音素是我不可分割的小伙伴。她胆小，学骑自行车这样的小事在她看来都是一场巨大的冒险。而我，早已在风中驰骋，却甘愿放慢脚步，成为她坚实的后盾。每当下雨，泥巴路变得泥泞不堪，我们便弃车步行，那是一段遥远却美好的上学路。我们的笑声在浓雾中回荡，眉毛上的霜花仿佛圣诞老人的胡须，让我们的世界充满了童话般的温暖。  \n\n',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.sp,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w400,
-                            height: 1.3,
-                            letterSpacing: -0.41,
-                          ),
-                        ),
-                      ))))),
-          SizedBox(height: 10.h),
-          SizedBox(
-            width: 104.w,
-            height: 44.h,
-            child: Text(
-              '删除本段',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFFE04F5F),
-                fontSize: 18.sp,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                height: 0.07,
-                letterSpacing: -0.41,
-              ),
-            ),
-          )
+                              padding: EdgeInsets.all(10.w),
+                              child: content.startsWith("/data")
+                                  ? Image.file(File(content))
+                                  : CustomTextField(
+                                      controller: textController,
+                                      hintText: "",
+                                      //prefixIcon: Icons.person_outline,
+                                      background_color: Colors.white,
+                                      inputType: TextInputType.name,
+                                      fontColor: Colors.black)))))),
+          SizedBox(height: 20.h),
+          GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                context.read<ChatGPTPromptService>().deleteParagraph(index);
+                Navigator.of(context).pop();
+              },
+              child: SizedBox(
+                width: 104.w,
+                height: 44.h,
+                child: Text(
+                  '删除本段',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFFE04F5F),
+                    fontSize: 18.sp,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    height: 0.07,
+                    letterSpacing: -0.41,
+                  ),
+                ),
+              ))
         ]));
   }
 }

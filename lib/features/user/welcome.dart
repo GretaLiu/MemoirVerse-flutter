@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:memoirverse/components/custom_button.dart';
 import 'package:memoirverse/features/landing/landing_page.dart';
+import 'package:memoirverse/features/user/signin/signinPage.dart';
+
 import 'package:memoirverse/features/user/signin/widget/signin.dart';
+import 'package:memoirverse/services/UserService.dart';
+import 'package:provider/provider.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    Scaffold scaffold = Scaffold(
         body: Container(
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(color: Color(0xFFFFFFF4)),
@@ -74,58 +79,37 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 38.h),
-              GestureDetector(
-                  onTap: () {
+              CustomButton(
+                  width: 160.w,
+                  height: 48.h,
+                  color: Color(0xFF75A47F),
+                  selected: true,
+                  needBorder: true,
+                  text: "开始",
+                  fontColor: Colors.white,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                  onPress: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LandingPage()),
                     );
-                    // showModalBottomSheet(
-                    //   context: context,
-                    //   builder: (BuildContext context) {
-                    //     return Container(
-                    //         height: 706.h,
-                    //         decoration: const ShapeDecoration(
-                    //           color: Color(0xFFFFFFF4),
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(40),
-                    //               topRight: Radius.circular(40),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         child: SignIn());
-                    //   },
-                    // );
-                  },
-                  child: Container(
-                      width: 160.w,
-                      height: 48.h,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFF75A47F),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1, color: Color(0xFF75A47F)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '开始',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.sp,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                height: 0.06,
-                                letterSpacing: -0.41,
-                              ),
-                            ),
-                            SizedBox(height: 2.h)
-                          ])))
+                  }),
             ])));
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (context.read<UserService>().need_signin) {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return const SigninPage();
+          },
+        );
+        context.read<UserService>().need_signin = false;
+      }
+    });
+    return scaffold;
   }
 }

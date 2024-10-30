@@ -1,6 +1,10 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:memoirverse/components/search.dart';
+import 'package:memoirverse/core/hive/hive_chat_prompt_model.dart';
+import 'package:memoirverse/core/services/chatgpt_prompt_service.dart';
+import 'package:memoirverse/core/services/db_service.dart';
 import 'package:memoirverse/features/write_story/chat_history/chat_history.dart';
 import 'package:memoirverse/services/WriteStoryService.dart';
 import 'package:provider/provider.dart';
@@ -37,18 +41,20 @@ class ChatSummaryHistoryWidget extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return buildStory(context, index); //每个item的布局
               },
-              itemCount: context
-                  .watch<WriteStoryService>()
-                  .chat_summary_history
-                  .length))
+              itemCount: context.watch<LocalDBService>().chatHistory.length))
     ]);
   }
 
   Widget buildStory(BuildContext context, int index) {
+    var chatHistory = context.watch<LocalDBService>().chatHistory;
+    int length = chatHistory.length;
+    HiveChatPromptModel chat = chatHistory.values.toList()[length - index - 1];
+    var chatId = chatHistory.keys.toList()[index];
     return Padding(
         padding: EdgeInsets.fromLTRB(7.0.w, 3.0.h, 7.0.w, 13.0.h),
         child: GestureDetector(
             onTap: () {
+              context.read<ChatGPTPromptService>().openChatHistory(chatId);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -73,9 +79,8 @@ class ChatSummaryHistoryWidget extends StatelessWidget {
                     width: 328.w,
                     height: 22.h,
                     child: Text(
-                      context
-                          .watch<WriteStoryService>()
-                          .chat_summary_history[index]["time"],
+                      formatDate(chat.date!,
+                          [yyyy, '年', mm, '月', dd, '日', HH, ":", nn]),
                       style: TextStyle(
                         color: Color(0xFF7F7C7C),
                         fontSize: 14.sp,
@@ -90,9 +95,7 @@ class ChatSummaryHistoryWidget extends StatelessWidget {
                       child: SizedBox(
                     width: 328.w,
                     child: Text(
-                      context
-                          .watch<WriteStoryService>()
-                          .chat_summary_history[index]["summary"],
+                      chat.summary!,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.sp,

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({
+  CustomButton({
     super.key,
     required this.width,
     required this.height,
     required this.color,
+    this.borderColor = const Color(0xFF75A47F),
     required this.selected,
     required this.needBorder,
     required this.text,
@@ -28,6 +29,7 @@ class CustomButton extends StatelessWidget {
 
   final String text;
   final Color fontColor;
+  final Color borderColor;
 
   final double fontSize;
 
